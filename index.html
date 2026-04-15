@@ -8,9 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
     <style>
-         /* ============================================================
-        СКИДАННЯ ТА БАЗОВІ СТИЛІ
-        ============================================================ */
          *, *::before, *::after {
              box-sizing: border-box;
              margin: 0;
@@ -35,7 +32,6 @@
              position: relative;
          }
 
-             /* Фоновий шум / текстура */
              body::before {
                  content: '';
                  position: fixed;
@@ -45,7 +41,6 @@
                  z-index: 0;
              }
 
-             /* Золота лінія зверху */
              body::after {
                  content: '';
                  position: fixed;
@@ -57,9 +52,6 @@
                  z-index: 10;
              }
 
-         /* ============================================================
-        КАРТКА
-        ============================================================ */
          .card {
              position: relative;
              z-index: 1;
@@ -432,15 +424,12 @@
     </div>
 
     <script>
-        // 1. АДРЕСА API ВАШОГО СЕРВЕРА
         const API_URL = "https://jocelyn-hypertropical-joanne.ngrok-free.dev/api/rsvp";
 
-        // 2. ОТРИМАННЯ ДАНИХ З ПОСИЛАННЯ
         const params = new URLSearchParams(window.location.search);
-        let guestId = params.get("id"); // Беремо ID з посилання
-        const guestNameUrl = params.get("name"); // Беремо ім'я з посилання
+        let guestId = params.get("id"); 
+        const guestNameUrl = params.get("name"); 
 
-        // Підставляємо ім'я, якщо воно є
         if (guestNameUrl && guestNameUrl.trim()) {
             document.getElementById("guestName").textContent = decodeURIComponent(guestNameUrl.trim());
         }
@@ -449,9 +438,6 @@
             return document.getElementById("guestName").textContent;
         }
 
-        // ============================================================
-        // ВІДЛІК ЧАСУ
-        // ============================================================
         (function initCountdown() {
             const weddingDate = new Date("2026-06-26T13:15:00");
             function pad(n) { return String(n).padStart(2, "0"); }
@@ -472,9 +458,6 @@
             setInterval(tick, 1000);
         })();
 
-        // ============================================================
-        // АВТОМАТИЧНА ВІДПРАВКА СТАТУСУ "ПЕРЕГЛЯНУТО"
-        // ============================================================
         window.addEventListener("DOMContentLoaded", async () => {
             if (!guestId) return; // Якщо відкрили без посилання - нічого не відправляємо
             try {
@@ -486,14 +469,10 @@
             } catch (_) {  }
         });
 
-        // ============================================================
-        // ВІДПРАВКА RSVP ("ПІДТВЕРДЖЕНО")
-        // ============================================================
         async function sendRsvp() {
             const btn = document.getElementById("rsvpBtn");
             const statusEl = document.getElementById("statusMsg");
 
-            // Якщо гостя відкрили без ID, створимо фейковий (щоб уникнути помилки 500)
             if (!guestId) guestId = "00000000-0000-0000-0000-000000000000";
 
             btn.disabled = true;
