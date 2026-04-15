@@ -458,8 +458,21 @@
             setInterval(tick, 1000);
         })();
 
-        window.addEventListener("DOMContentLoaded", async () => {
-            if (!guestId) return; // Якщо відкрили без посилання - нічого не відправляємо
+       window.addEventListener("DOMContentLoaded", async () => {
+           
+            if (!guestId) {
+                const btn = document.getElementById("rsvpBtn");
+                const statusEl = document.getElementById("statusMsg");
+                
+                btn.disabled = true;
+                btn.innerHTML = "<span>✦ Тільки за особистим посиланням</span>";
+                btn.style.opacity = "0.5";
+                
+                statusEl.className = "status loading"; 
+                statusEl.innerHTML = "Це сторінка попереднього перегляду.<br>Щоб підтвердити присутність, відкрийте ваше персональне посилання.";
+                return; 
+            }
+           
             try {
                 await fetch(API_URL, {
                     method: "POST",
@@ -470,10 +483,10 @@
         });
 
         async function sendRsvp() {
+            if (!guestId) return;
+
             const btn = document.getElementById("rsvpBtn");
             const statusEl = document.getElementById("statusMsg");
-
-            if (!guestId) guestId = "00000000-0000-0000-0000-000000000000";
 
             btn.disabled = true;
             statusEl.className = "status loading";
@@ -483,7 +496,11 @@
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
-                    body: JSON.stringify({ id: guestId, guestName: getGuestName(), status: "Accepted" })
+                    body: JSON.stringify({ 
+                        id: guestId, 
+                        guestName: getGuestName(), 
+                        status: "Accepted" 
+                    })
                 });
 
                 if (!response.ok) throw new Error(`Помилка: ${response.status}`);
